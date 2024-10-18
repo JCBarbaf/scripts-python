@@ -26,7 +26,7 @@ def ParseInfo(person, info):
 
 def GetTop(dataList, num, info, metric):
    for index, data in enumerate(dataList[:num], start=1):
-      print(f'{index}- {data['name']}: {data[info]} {metric}')
+      print(f'  {index}- {data['name']}: {data[info]} {metric}')
 
 
 #Script
@@ -67,7 +67,10 @@ while True:
             action = input('\n>Return')
         case '3':
             clear()
-            print('WIP')
+            print('---Top 5 star wars characters that have appeared in the most movies---')
+            numberOfFilms = list(map(lambda person: {"name": person["name"], "films": len(person["films"])}, people))
+            peopleByFilms = sorted(numberOfFilms, key=lambda person: person['films'], reverse=True)
+            GetTop(peopleByFilms, 5, 'films', 'films')
             action = input('\n>Return')
         case '4':
             clear()
