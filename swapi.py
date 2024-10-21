@@ -33,6 +33,19 @@ def SortByFilms(dataList):
   sortedList = sorted(numberOfFilms, key=lambda data: data['films'], reverse=True)
   return sortedList
 
+def SortPlanetsByData(dataList):
+  planetNames = {planet['url'].split('/')[-2]: planet['name'] for planet in planets}
+  dataByPlanet = {}
+  for data in dataList:
+    planetID = data['homeworld'].split('/')[-2]
+    if (planetID in dataByPlanet):
+      dataByPlanet[planetID] += 1
+    else:
+      dataByPlanet[planetID] = 1
+  planetCount = [{'id': planetID, 'name': planetNames.get(planetID, 'Unknown Planet'), 'count': count} for planetID, count in dataByPlanet.items()]
+  sortedList = sorted(planetCount, key=lambda planet: planet['count'], reverse=True)
+  return sortedList
+
 def GetTop(dataList, num, info, metric):
    for index, data in enumerate(dataList[:num], start=1):
       print(f'  {index}- {data['name']}: {data[info]} {metric}')
@@ -96,7 +109,9 @@ def PeopleMenu():
       return 1
     case '4':
       clear()
-      print('WIP')
+      planetsByCount = SortPlanetsByData(people)
+      print('---Top 5 Star Wars planets with the most characters---')
+      GetTop(planetsByCount, 5, 'count', 'characters')
       action = input('\n>Return')
       return 1
     case _:
@@ -155,6 +170,7 @@ def VehiclesMenu():
 #Script
 people = SaveData('people')
 vehicles = SaveData('vehicles')
+planets = SaveData('planets')
 activeMenu = 0
 
 while True:
